@@ -1,20 +1,16 @@
 'use strict';
-const ytlist = require('youtube-playlist');
-
+const scraper = require('./scrap');
 
 module.exports.getChannelVideos = async event => {
   try {
     // const channelOrPlaylistId = 'UCCMC_4hcI9zoOvjSfka0-xQ';
     const channelOrPlaylistId = (event.queryStringParameters || {}).id;
     console.log(channelOrPlaylistId);
-    const url = `https://www.youtube.com/channel/${channelOrPlaylistId}/videos`;
-    const response = await ytlist(url, 'url');
-
-    console.log(response);
+    const videos = await scraper.getChannelVideos(channelOrPlaylistId);
 
     return {
       statusCode: 200,
-      body: JSON.stringify([])
+      body: JSON.stringify(videos)
     };
   } catch(err) {
     return {
