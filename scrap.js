@@ -3,6 +3,8 @@ const cheerio = require('cheerio');
 const iPhone = puppeteer.devices['iPhone X'];
 
 const showMoreButtonSelector = 'c3-next-continuation button';
+const spinnerSelector = 'c3-next-continuation .spinner.nextcontinuation-spinner';
+const videoLinkSelector = 'ytm-compact-video-renderer .compact-media-item-metadata-content';
 
 const loadMorePages = async(page, maxPage) => {
   const maxAllowedPage = maxPage > 99 ? 99 : maxPage;
@@ -13,7 +15,7 @@ const loadMorePages = async(page, maxPage) => {
     if(showMoreElem){
       await showMoreElem.click();
       await new Promise((resolve) => setTimeout(resolve, 400));
-      await page.waitForSelector('c3-next-continuation .spinner.nextcontinuation-spinner', {hidden: true})
+      await page.waitForSelector(spinnerSelector, {hidden: true})
     } else {
       break; //break the loop
     }
@@ -44,7 +46,7 @@ const parseVideos = (response) => {
   const dom = cheerio.load(response);
 
   let videos = [];
-  dom('ytm-compact-video-renderer .compact-media-item-metadata-content').each((_idx, el) => {
+  dom(videoLinkSelector).each((_idx, el) => {
     const video = dom(el).attr('href');
     videos.push(video.replace('/watch?v=', ''));
   });
@@ -69,7 +71,7 @@ const getUserVideos = async (userId, maxPage)  => {
   return videos;
 }
 
-// getChannelVideos('UCCMC_4hcI9zoOvjSfka0-xQ', 5);
+getChannelVideos('UCCMC_4hcI9zoOvjSfka0-xQ', 5);
 // getUserVideos('ValleyRanchIslamicCenter', 5);
 
 module.exports = {
