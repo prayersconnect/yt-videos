@@ -1,13 +1,38 @@
 const puppeteer = require('puppeteer');
 const cheerio = require('cheerio');
+const iPhone = puppeteer.devices['iPhone X'];
 
-const getURLContents = async (url) => {
+const showMoreButtonSelector = 'c3-next-continuation button';
+
+const loadMorePages = async(page, maxPage) => {
+  const maxAllowedPage = maxPage > 99 ? 99 : maxPage;
+
+  for(let currentPage = 1; currentPage < maxAllowedPage; currentPage++) {
+    console.log('Getting page', currentPage + 1);
+    const showMoreElem = await page.$(showMoreButtonSelector);
+    if(showMoreElem){
+      await showMoreElem.click();
+      await new Promise((resolve) => setTimeout(resolve, 400));
+      await page.waitForSelector('c3-next-continuation .spinner.nextcontinuation-spinner', {hidden: true})
+    } else {
+      break; //break the loop
+    }
+  }
+
+  // require('fs').writeFileSync('./list.html', await page.content());
+
+  return page;
+}
+const getURLContents = async (url, maxPage = 1) => {
   const browser = await puppeteer.launch();
 
   const page = await browser.newPage();
-  console.log('url', url);
+  await page.emulate(iPhone);
 
+  console.log('Getting page', 1);
   await page.goto(url);
+
+  await loadMorePages(page, maxPage === 'all' ? 99 : maxPage);
 
   const html = await page.content();
   browser.close();
@@ -19,7 +44,7 @@ const parseVideos = (response) => {
   const dom = cheerio.load(response);
 
   let videos = [];
-  dom('ytd-grid-video-renderer .yt-simple-endpoint').each((_idx, el) => {
+  dom('ytm-compact-video-renderer .compact-media-item-metadata-content').each((_idx, el) => {
     const video = dom(el).attr('href');
     videos.push(video.replace('/watch?v=', ''));
   });
@@ -27,13 +52,27 @@ const parseVideos = (response) => {
   return videos;
 }
 
-const getChannelVideos = async (channelId)  => {
-  const url = `https://www.youtube.com/channel/${channelId}/videos`;
-  
-  const videos = parseVideos(await getURLContents(url));
-
-  console.log('video list', videos);
-
+const getChannelVideos = async (channelId, maxPage)  => {
+  const url = `https://m.youtube.com/channel/${channelId}/videos`
+  const videos = parseVideos(await getURLContents(url, maxPage));
+  console.log('video list', videos, `Total ${videos.length} videos`);
+  return videos;
 }
 
-getChannelVideos('UCCMC_4hcI9zoOvjSfka0-xQ');
+const getUserVideos = async (userId, maxPage)  => {
+  const url = `https://m.youtube.com/c/${userId}/videos`;
+  // https://m.youtube.com/channel/UCCMC_4hcI9zoOvjSfka0-xQ/videos
+  const videos = parseVideos(await getURLContents(url, maxPage));
+
+  console.log('video list', videos, `Total ${videos.length} videos`);
+
+  return videos;
+}
+
+// getChannelVideos('UCCMC_4hcI9zoOvjSfka0-xQ', 5);
+// getUserVideos('ValleyRanchIslamicCenter', 5);
+
+module.exports = {
+  getChannelVideos,
+  getUserVideos
+}
