@@ -1,6 +1,9 @@
+'--unhandled-rejections = none'
 const puppeteer = require('puppeteer');
 const cheerio = require('cheerio');
 const iPhone = puppeteer.devices['iPhone X'];
+const { Youtube } = require('scrape-youtube');
+const youtube = new Youtube();
 
 const showMoreButtonSelector = 'c3-next-continuation button';
 const spinnerSelector = 'c3-next-continuation .spinner.nextcontinuation-spinner';
@@ -58,8 +61,16 @@ const getChannelVideos = async (channelId, maxPage)  => {
   const url = `https://m.youtube.com/channel/${channelId}/videos`
   const videos = parseVideos(await getURLContents(url, maxPage));
   console.log('video list', videos, `Total ${videos.length} videos`);
-  return videos;
+
+  const videoDetails = videos.forEach(async (videoId) => {
+  const url = `https://www.youtube.com/watch?v=${videoId}`
+  const videoDetail =  await youtube.searchOne(url)
+  console.log('video detail', videoDetail)
+
+  return videoDetails;
 }
+)}
+
 
 const getUserVideos = async (userId, maxPage)  => {
   const url = `https://m.youtube.com/c/${userId}/videos`;
