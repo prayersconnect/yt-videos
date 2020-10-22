@@ -1,21 +1,33 @@
-const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer-core');
+const chromium = require('chrome-aws-lambda');
+
 const cheerio = require('cheerio');
 const iPhone = puppeteer.devices['iPhone X'];
 
 const showMoreButtonSelector = 'c3-next-continuation button';
-const spinnerSelector = 'c3-next-continuation .spinner.nextcontinuation-spinner';
+// const spinnerSelector = 'c3-next-continuation .spinner.nextcontinuation-spinner';
 const videoLinkSelector = 'ytm-compact-video-renderer .compact-media-item-metadata-content';
 
-const loadMorePages = async(page, maxPage) => {
+
+const getBrowser = async () => {
+  return await puppeteer.launch({
+    args: chromium.args,
+    defaultViewport: chromium.defaultViewport,
+    executablePath: await chromium.executablePath,
+    headless: false
+  });
+}
+
+const loadMorePages = async (page, maxPage) => {
   const maxAllowedPage = maxPage > 99 ? 99 : maxPage;
 
-  for(let currentPage = 1; currentPage < maxAllowedPage; currentPage++) {
+  for (let currentPage = 1; currentPage < maxAllowedPage; currentPage++) {
     console.log('Getting page', currentPage + 1);
     const showMoreElem = await page.$(showMoreButtonSelector);
-    if(showMoreElem){
+    if (showMoreElem) {
       await showMoreElem.click();
-      await new Promise((resolve) => setTimeout(resolve, 400));
-      await page.waitForSelector(spinnerSelector, {hidden: true})
+      // await page.waitForSelector(spinnerSelector, {visible: false});
+      await new Promise((resolve) => setTimeout(resolve, 500));
     } else {
       break; //break the loop
     }
@@ -25,19 +37,23 @@ const loadMorePages = async(page, maxPage) => {
 
   return page;
 }
-const getURLContents = async (url, maxPage = 1) => {
-  const browser = await puppeteer.launch();
 
+
+const getURLContents = async (url, maxPage = 1) => {
+  const browser = await getBrowser();
+
+  console.log('user agent', await browser.userAgent());
   const page = await browser.newPage();
   await page.emulate(iPhone);
+  await page.setUserAgent('Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36');
 
   console.log('Getting page', 1);
   await page.goto(url);
 
-  await loadMorePages(page, maxPage === 'all' ? 99 : maxPage);
+  await loadMorePages(page, maxPage == 'all' ? 99 : maxPage);
 
   const html = await page.content();
-  browser.close();
+  await browser.close();
   return html;
 
 }
@@ -54,16 +70,15 @@ const parseVideos = (response) => {
   return videos;
 }
 
-const getChannelVideos = async (channelId, maxPage)  => {
+const getChannelVideos = async (channelId, maxPage) => {
   const url = `https://m.youtube.com/channel/${channelId}/videos`
   const videos = parseVideos(await getURLContents(url, maxPage));
   console.log('video list', videos, `Total ${videos.length} videos`);
   return videos;
 }
 
-const getUserVideos = async (userId, maxPage)  => {
+const getUserVideos = async (userId, maxPage) => {
   const url = `https://m.youtube.com/c/${userId}/videos`;
-  // https://m.youtube.com/channel/UCCMC_4hcI9zoOvjSfka0-xQ/videos
   const videos = parseVideos(await getURLContents(url, maxPage));
 
   console.log('video list', videos, `Total ${videos.length} videos`);
@@ -71,10 +86,17 @@ const getUserVideos = async (userId, maxPage)  => {
   return videos;
 }
 
-getChannelVideos('UCCMC_4hcI9zoOvjSfka0-xQ', 5);
-// getUserVideos('ValleyRanchIslamicCenter', 5);
+if (require.main === module) {
+  // getChannelVideos('UCCMC_4hcI9zoOvjSfka0-xQ', 5);
+  // getUserVideos('ValleyRanchIslamicCenter', 5);
+}
 
 module.exports = {
   getChannelVideos,
   getUserVideos
 }
+
+
+/**
+ <div class="vbox"><c3-next-continuation loading=""><c3-material-button class="nextcontinuation-button"><button class="c3-material-button-button"><div class="cbox">Show more</div></button></c3-material-button><div class="spinner nextcontinuation-spinner"></div></c3-next-continuation></div>
+ **/

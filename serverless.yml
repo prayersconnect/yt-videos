@@ -2,9 +2,10 @@ service: yt-videos
 provider:
   name: aws
   runtime: nodejs12.x
-  memorySize: 128
+  memorySize: 1024
   profile: pc_serverless
-  stage: dev
+  stage: ${opt:stage, 'dev'}
+  timeout: 300
   environment:
     FOO: bar
 
@@ -15,4 +16,10 @@ functions:
       - http: 
           path: list
           method: get
-          cors: true    
+          cors: true
+    layers:
+      - { Ref: ChromiumLambdaLayer }
+
+layers:
+  chromium:
+    path: layers
