@@ -61,15 +61,18 @@ const getChannelVideos = async (channelId, maxPage)  => {
   const videos = parseVideos(await getURLContents(url, maxPage));
   console.log('video list', videos, `Total ${videos.length} videos`);
 
-  const videoDetails = videos.forEach(async (videoId) => {
-  const url = `https://www.youtube.com/watch?v=${videoId}`
-  const videoDetail =  await youtube.searchOne(url)
-  console.log('video detail', videoDetail)
-
-  return videoDetails;
+  return videos;
 }
-)}
 
+const getVideoDetails = (videos = []) => {
+  videos.map( async (videoId) => {
+    const url = `https://www.youtube.com/watch?v=${videoId}`
+    const videoDetail =  await youtube.searchOne(url)
+    console.log('video detail:', videoDetail)
+    
+    return videoDetail;
+  });
+}
 
 const getUserVideos = async (userId, maxPage)  => {
   const url = `https://m.youtube.com/c/${userId}/videos`;
@@ -81,10 +84,12 @@ const getUserVideos = async (userId, maxPage)  => {
   return videos;
 }
 
-getChannelVideos('UCCMC_4hcI9zoOvjSfka0-xQ', 5);
+// getChannelVideos('UCCMC_4hcI9zoOvjSfka0-xQ', 5);
 // getUserVideos('ValleyRanchIslamicCenter', 5);
+getVideoDetails(['qSP_BP-pM4w', 'ra-5KkKrbXg', '-7DHxq4PBoQ', 'zZgcOpJOAWo'])
 
 module.exports = {
   getChannelVideos,
-  getUserVideos
+  getUserVideos,
+  getVideoDetails
 }
