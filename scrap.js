@@ -2,7 +2,7 @@ const puppeteer = require('puppeteer');
 const cheerio = require('cheerio');
 const iPhone = puppeteer.devices['iPhone X'];
 const { Youtube } = require('scrape-youtube');
-const youtube = new Youtube();
+
 
 const showMoreButtonSelector = 'c3-next-continuation button';
 const spinnerSelector = 'c3-next-continuation .spinner.nextcontinuation-spinner';
@@ -65,6 +65,8 @@ const getChannelVideos = async (channelId, maxPage)  => {
 }
 
 const getVideoDetails = (videos = []) => {
+  const youtube = new Youtube();
+  
   return videos.map(async (videoId) => {
     const url = `https://www.youtube.com/watch?v=${videoId}`
     const videoDetail =  await youtube.searchOne(url)
