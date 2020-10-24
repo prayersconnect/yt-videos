@@ -3,6 +3,8 @@ const chromium = require('chrome-aws-lambda');
 
 const cheerio = require('cheerio');
 const iPhone = puppeteer.devices['iPhone X'];
+const { Youtube } = require('scrape-youtube');
+
 
 const showMoreButtonSelector = 'c3-next-continuation button';
 // const spinnerSelector = 'c3-next-continuation .spinner.nextcontinuation-spinner';
@@ -74,6 +76,7 @@ const getChannelVideos = async (channelId, maxPage) => {
   const url = `https://m.youtube.com/channel/${channelId}/videos`
   const videos = parseVideos(await getURLContents(url, maxPage));
   console.log('video list', videos, `Total ${videos.length} videos`);
+
   return videos;
 }
 
@@ -86,17 +89,24 @@ const getUserVideos = async (userId, maxPage) => {
   return videos;
 }
 
+const getVideoDetails = (videos = []) => {
+  const youtube = new Youtube();
+  
+  return videos.map(async (videoId) => {
+    const url = `https://www.youtube.com/watch?v=${videoId}`
+    const videoDetail =  await youtube.searchOne(url)
+    console.log('video detail:', videoDetail)
+  });
+}
+  
 if (require.main === module) {
   // getChannelVideos('UCCMC_4hcI9zoOvjSfka0-xQ', 5);
   // getUserVideos('ValleyRanchIslamicCenter', 5);
+  // getVideoDetails(['qSP_BP-pM4w', 'ra-5KkKrbXg', '-7DHxq4PBoQ', 'zZgcOpJOAWo'])
 }
 
 module.exports = {
   getChannelVideos,
-  getUserVideos
+  getUserVideos,
+  getVideoDetails
 }
-
-
-/**
- <div class="vbox"><c3-next-continuation loading=""><c3-material-button class="nextcontinuation-button"><button class="c3-material-button-button"><div class="cbox">Show more</div></button></c3-material-button><div class="spinner nextcontinuation-spinner"></div></c3-next-continuation></div>
- **/
