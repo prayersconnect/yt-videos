@@ -28,3 +28,22 @@ module.exports.getChannelVideos = async event => {
     }
   }
 };
+
+
+module.exports.getVideoDetails = async event => {
+  try {
+    console.log(`Function version: ${process.env.AWS_LAMBDA_FUNCTION_VERSION}`);
+    const videoId = (event.queryStringParameters || {}).id;
+    console.log('videoId', videoId);
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify(scraper.getVideoDetails([videoId]))
+    };
+  } catch (err) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify([err.message])
+    }
+  }
+};

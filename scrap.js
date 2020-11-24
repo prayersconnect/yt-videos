@@ -3,7 +3,7 @@ const chromium = require('chrome-aws-lambda');
 
 const cheerio = require('cheerio');
 const iPhone = puppeteer.devices['iPhone X'];
-const { Youtube } = require('scrape-youtube');
+const youtube = require('scrape-youtube');
 
 
 const showMoreButtonSelector = 'c3-next-continuation button';
@@ -90,15 +90,13 @@ const getUserVideos = async (userId, maxPage) => {
 }
 
 const getVideoDetails = (videos = []) => {
-  const youtube = new Youtube();
-  
   return videos.map(async (videoId) => {
     const url = `https://www.youtube.com/watch?v=${videoId}`
     const videoDetail =  await youtube.searchOne(url)
     console.log('video detail:', videoDetail)
   });
 }
-  
+
 if (require.main === module) {
   // getChannelVideos('UCCMC_4hcI9zoOvjSfka0-xQ', 5);
   // getUserVideos('ValleyRanchIslamicCenter', 5);
