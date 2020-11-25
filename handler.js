@@ -38,7 +38,7 @@ module.exports.getVideoDetails = async event => {
 
     return {
       statusCode: 200,
-      body: JSON.stringify(scraper.getVideoDetails([videoId]))
+      body: JSON.stringify(await scraper.getVideoDetails([videoId]))
     };
   } catch (err) {
     return {

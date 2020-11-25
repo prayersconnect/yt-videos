@@ -3,8 +3,7 @@ const chromium = require('chrome-aws-lambda');
 
 const cheerio = require('cheerio');
 const iPhone = puppeteer.devices['iPhone X'];
-const youtube = require('scrape-youtube');
-
+const { Youtube } = require('scrape-youtube');
 
 const showMoreButtonSelector = 'c3-next-continuation button';
 // const spinnerSelector = 'c3-next-continuation .spinner.nextcontinuation-spinner';
@@ -89,18 +88,25 @@ const getUserVideos = async (userId, maxPage) => {
   return videos;
 }
 
-const getVideoDetails = (videos = []) => {
-  return videos.map(async (videoId) => {
+const getVideoDetails = async(videos = []) => {
+  const youtube = new Youtube();
+  return await Promise.all(videos.map(async (videoId) => {
     const url = `https://www.youtube.com/watch?v=${videoId}`
     const videoDetail =  await youtube.searchOne(url)
-    console.log('video detail:', videoDetail)
-  });
+    // console.log('video detail:', videoDetail)
+    return videoDetail;
+  }));
 }
 
 if (require.main === module) {
   // getChannelVideos('UCCMC_4hcI9zoOvjSfka0-xQ', 5);
   // getUserVideos('ValleyRanchIslamicCenter', 5);
-  // getVideoDetails(['qSP_BP-pM4w', 'ra-5KkKrbXg', '-7DHxq4PBoQ', 'zZgcOpJOAWo'])
+  // (async() => {
+  //   const details = await getVideoDetails(['qSP_BP-pM4w', 'ra-5KkKrbXg', '-7DHxq4PBoQ', 'zZgcOpJOAWo']);
+  //   console.log('details', details);
+  // })()
+
+
 }
 
 module.exports = {
