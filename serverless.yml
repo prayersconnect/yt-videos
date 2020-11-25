@@ -1,3 +1,4 @@
+app: yt-videos
 service: yt-videos
 provider:
   name: aws
@@ -6,19 +7,19 @@ provider:
   profile: pc_serverless
   stage: ${opt:stage, 'dev'}
   timeout: 300
+  apiGateway:
+    shouldStartNameWithService: true
   environment:
     FOO: bar
 
 functions:
   list:
-    handler: handler.getChannelVideos
+    handler: handler.getVideoList
     events:
       - http: 
           path: list
           method: get
           cors: false
-    layers:
-      - { Ref: ChromiumLambdaLayer }
   details:
     handler: handler.getVideoDetails
     events:
@@ -26,7 +27,3 @@ functions:
           path: details
           method: get
           cors: false
-
-layers:
-  chromium:
-    path: layers

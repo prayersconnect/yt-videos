@@ -1,7 +1,8 @@
 'use strict';
 const scraper = require('./scrap');
+const ytch = require('yt-channel-info');
 
-module.exports.getChannelVideos = async event => {
+module.exports.getVideoList = async event => {
   try {
     console.log(`Function version: ${process.env.AWS_LAMBDA_FUNCTION_VERSION}`);
     const channelOrUser = (event.queryStringParameters || {}).id;
