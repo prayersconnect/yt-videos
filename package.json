@@ -6,7 +6,6 @@
   "author": "The HungryCoder <rajuru@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "scrape-youtube": "0.2.4",
     "yt-channel-info": "^1.1.4"
   },
   "devDependencies": {

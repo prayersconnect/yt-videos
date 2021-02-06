@@ -4,7 +4,6 @@ provider:
   name: aws
   runtime: nodejs12.x
   memorySize: 1024
-  profile: pc_serverless
   stage: ${opt:stage, 'dev'}
   timeout: 300
   apiGateway:
