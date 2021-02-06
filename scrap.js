@@ -2,6 +2,7 @@ const ytch = require('yt-channel-info');
 
 function parseVideo(details) {
 
+  // console.log('details', details);
   const thumbnail = details.videoThumbnails.sort((vid1, vid2) => vid2.width - vid1.width)[0];
 
   return {

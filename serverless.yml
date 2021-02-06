@@ -19,10 +19,3 @@ functions:
           path: list
           method: get
           cors: false
-  details:
-    handler: handler.getVideoDetails
-    events:
-      - http: 
-          path: details
-          method: get
-          cors: false
