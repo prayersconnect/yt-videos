@@ -6,6 +6,7 @@ function parseVideo(details) {
   const thumbnail = details.videoThumbnails.sort((vid1, vid2) => vid2.width - vid1.width)[0];
 
   return {
+    id: details.videoId,
     title: details.title,
     description: null,
     duration: details.lengthSeconds,
