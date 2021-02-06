@@ -1,8 +1,6 @@
 const ytch = require('yt-channel-info');
 
 function parseVideo(details) {
-
-  // console.log('details', details);
   const thumbnail = details.videoThumbnails.sort((vid1, vid2) => vid2.width - vid1.width)[0];
 
   return {
@@ -15,9 +13,27 @@ function parseVideo(details) {
   }
 }
 
-const getVideos = async (channelOrUserId, maxPage) => {
-  const videos = await ytch.getChannelVideos(channelOrUserId, 'newest');
-  return videos.items.filter((vid) => vid.authorId === channelOrUserId).map(parseVideo);
+const getVideos = async (channelOrUserId, maxPage = 1) => {
+  let videos = []
+  let currentPage = 1;
+  let continuation = null;
+
+  while(currentPage <= maxPage) {
+    console.log(`Retrieving page ${currentPage} of ${maxPage}`, continuation)
+    let pageResult;
+    if(continuation) {
+      pageResult = await ytch.getChannelVideosMore(continuation);
+    } else {
+      pageResult = await ytch.getChannelVideos(channelOrUserId, 'newewst');
+    }
+    // console.log('pageResult', pageResult.items);
+    videos = videos.concat(pageResult.items);
+
+    continuation = pageResult.continuation;
+    currentPage++;
+  }
+
+  return videos.map(parseVideo);
 }
 
 if (require.main === module) {
