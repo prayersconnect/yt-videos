@@ -6,7 +6,7 @@
   "author": "The HungryCoder <rajuru@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "yt-channel-info": "^1.1.4"
+    "yt-channel-info": "^2.1.0"
   },
   "devDependencies": {
     "serverless": "^2.6.0"

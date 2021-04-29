@@ -662,6 +662,13 @@ axios@^0.19.2:
   dependencies:
     follow-redirects "1.5.10"
 
+axios@^0.21.1:
+  version "0.21.1"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-0.21.1.tgz#22563481962f4d6bde9a76d516ef0e5d3c09b2b8"
+  integrity sha512-dKQiRHxGD9PPRIUNIWvZhPTPpl1rf/OxTYKsqKUDjBwYylTvV7SjSHJb9ratfyzM6wCdLCOYLzs73qpg5c4iGA==
+  dependencies:
+    follow-redirects "^1.10.0"
+
 backo2@1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/backo2/-/backo2-1.0.2.tgz#31ab1ac8b129363463e35b3ebb69f4dfcfba7947"
@@ -1778,6 +1785,11 @@ follow-redirects@1.5.10:
   integrity sha512-0V5l4Cizzvqt5D44aTXbFZz+FtyXV1vrDN6qrelxtfYQKW0KO0W2T/hkE8xvGa/540LkZlkaUjO4ailYTFtHVQ==
   dependencies:
     debug "=3.1.0"
+
+follow-redirects@^1.10.0:
+  version "1.14.0"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.14.0.tgz#f5d260f95c5f8c105894491feee5dc8993b402fe"
+  integrity sha512-0vRwd7RKQBTt+mgu87mtYeofLFZpTas2S9zY+jIeuLJMNvudIgF52nr19q40HOwH5RrhWIPuj9puybzSJiRrVg==
 
 forever-agent@~0.6.1:
   version "0.6.1"
@@ -4295,12 +4307,12 @@ yocto-queue@^0.1.0:
   resolved "https://registry.yarnpkg.com/yocto-queue/-/yocto-queue-0.1.0.tgz#0294eb3dee05028d31ee1a5fa2c556a6aaf10a1b"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
 
-yt-channel-info@^1.1.4:
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/yt-channel-info/-/yt-channel-info-1.1.4.tgz#52d6b97ec3f2c1ec830edac10facf71c93a84c72"
-  integrity sha512-FQfttLEWMlVH4qXEkSxPQBkcg6RUquXeckoJtpJP8uMhv2HSRMQ6qND1kf/kQf6eThd8UaYTvXrsgWnIAOG44w==
+yt-channel-info@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/yt-channel-info/-/yt-channel-info-2.1.0.tgz#36b3c55d93fce6660cf858f35f51ccbd4c174b21"
+  integrity sha512-e7rDJUw+GoOMojQYLG/SlD4gwXiRChmRj+tMzfLyoHUuvELZKq3bayTkepFDNls/0dLwc/vU6Xr9uAIXRGLvBw==
   dependencies:
-    axios "^0.19.2"
+    axios "^0.21.1"
     querystring "^0.2.0"
 
 zip-stream@^4.0.4:

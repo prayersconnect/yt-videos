@@ -7,6 +7,10 @@ module.exports.getVideoList = async event => {
     const channelOrUser = (event.queryStringParameters || {}).id;
     const maxPages = (event.queryStringParameters || {}).max_pages;
 
+    if(!channelOrUser) {
+      throw new Error('You must provide channel/user id!')
+    }
+
     const videos = await scraper.getVideos(channelOrUser, maxPages);
 
     console.log('total', videos.length);
@@ -15,9 +19,10 @@ module.exports.getVideoList = async event => {
       body: JSON.stringify(videos)
     };
   } catch (err) {
+    console.log(err);
     return {
       statusCode: 500,
-      body: JSON.stringify(err)
+      body: err instanceof Error ? err.message : JSON.stringify(err)
     }
   }
 };
