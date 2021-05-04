@@ -4307,10 +4307,10 @@ yocto-queue@^0.1.0:
   resolved "https://registry.yarnpkg.com/yocto-queue/-/yocto-queue-0.1.0.tgz#0294eb3dee05028d31ee1a5fa2c556a6aaf10a1b"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
 
-yt-channel-info@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/yt-channel-info/-/yt-channel-info-2.1.0.tgz#36b3c55d93fce6660cf858f35f51ccbd4c174b21"
-  integrity sha512-e7rDJUw+GoOMojQYLG/SlD4gwXiRChmRj+tMzfLyoHUuvELZKq3bayTkepFDNls/0dLwc/vU6Xr9uAIXRGLvBw==
+yt-channel-info@latest:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/yt-channel-info/-/yt-channel-info-2.1.1.tgz#29f9acc1165c6a5ca5b21c90a87498c37ab791e7"
+  integrity sha512-oiTSuEGCMFMpgZYYDZhxskPoUnhkFY2DukkTy90wsQdHNfAIjPsqitHYBm75rXDkL2ubLX+nogzf3ZHa9U1e6A==
   dependencies:
     axios "^0.21.1"
     querystring "^0.2.0"

@@ -19,7 +19,7 @@ const getVideos = async (channelOrUserId, maxPage = 1) => {
   let continuation = null;
 
   while(currentPage <= maxPage) {
-    console.log(`Retrieving page ${currentPage} of ${maxPage}`, continuation)
+    console.log(`Retrieving page ${currentPage} of ${maxPage} for ${channelOrUserId}`, continuation)
     let pageResult;
     if(continuation) {
       pageResult = await ytch.getChannelVideosMore(continuation);
