@@ -1,11 +1,12 @@
 const ytch = require('yt-channel-info');
+const utf8 = require('utf8');
 
 function parseVideo(details) {
   const thumbnail = details.videoThumbnails.sort((vid1, vid2) => vid2.width - vid1.width)[0];
 
   return {
     id: details.videoId,
-    title: details.title,
+    title: utf8.encode(details.title, 'utf-8'),
     description: null,
     duration: details.lengthSeconds,
     thumbnail: thumbnail.url,
@@ -26,7 +27,7 @@ const getVideos = async (channelOrUserId, maxPage = 1) => {
     } else {
       pageResult = await ytch.getChannelVideos(channelOrUserId, 'newewst');
     }
-    // console.log('pageResult', pageResult.items);
+    // console.error('pageResult', pageResult.items);
     videos = videos.concat(pageResult.items);
 
     continuation = pageResult.continuation;

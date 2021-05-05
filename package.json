@@ -6,6 +6,7 @@
   "author": "The HungryCoder <rajuru@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "utf8": "^3.0.0",
     "yt-channel-info": "latest"
   },
   "devDependencies": {
