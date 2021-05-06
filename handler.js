@@ -13,7 +13,6 @@ module.exports.getVideoList = async event => {
 
     const videos = await scraper.getVideos(channelOrUser, maxPages);
 
-    console.log('total', videos.length);
     return {
       statusCode: 200,
       body: JSON.stringify(videos)

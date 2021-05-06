@@ -19,22 +19,27 @@ const getVideos = async (channelOrUserId, maxPage = 1) => {
   let currentPage = 1;
   let continuation = null;
 
-  while(currentPage <= maxPage) {
-    console.log(`Retrieving page ${currentPage} of ${maxPage} for ${channelOrUserId}`, continuation)
-    let pageResult;
-    if(continuation) {
-      pageResult = await ytch.getChannelVideosMore(continuation);
-    } else {
-      pageResult = await ytch.getChannelVideos(channelOrUserId, 'newewst');
+  try {
+    while (currentPage <= maxPage) {
+      console.log(`Retrieving page ${currentPage} of ${maxPage} for ${channelOrUserId}`, continuation)
+      let pageResult;
+      if (continuation) {
+        pageResult = await ytch.getChannelVideosMore(continuation);
+      } else {
+        pageResult = await ytch.getChannelVideos(channelOrUserId);
+      }
+      // console.error('pageResult', pageResult.items);
+      videos = videos.concat(pageResult.items);
+
+      continuation = pageResult.continuation;
+      currentPage++;
     }
-    // console.error('pageResult', pageResult.items);
-    videos = videos.concat(pageResult.items);
+    return videos.map(parseVideo);
 
-    continuation = pageResult.continuation;
-    currentPage++;
+  } catch(error) {
+    console.error(`Error while getting videos for ${channelOrUserId} on ${currentPage}.`, error)
+    return [];
   }
-
-  return videos.map(parseVideo);
 }
 
 if (require.main === module) {
